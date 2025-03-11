@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +9,7 @@ import {
   Stethoscope, 
   ArrowUpRight, 
   AlertCircle, 
-  Pills,
+  Pill,
   RefreshCw,
   ScrollText
 } from "lucide-react";
@@ -65,7 +64,6 @@ const MedicalHistoryCard = ({ medicalRecords }: MedicalHistoryCardProps) => {
     setExpandedRecordId(expandedRecordId === id ? null : id);
   };
 
-  // Sort records by id in descending order (newest first)
   const sortedRecords = [...medicalRecords].sort((a, b) => b.id - a.id);
 
   return (
@@ -149,7 +147,7 @@ const MedicalHistoryCard = ({ medicalRecords }: MedicalHistoryCardProps) => {
                         
                         {record.prescriptions.length > 0 && (
                           <div className="flex gap-2 items-start">
-                            <Pills className="h-4 w-4 text-primary mt-0.5" />
+                            <Pill className="h-4 w-4 text-primary mt-0.5" />
                             <div>
                               <div className="text-xs font-medium">Medications</div>
                               <ul className="text-sm list-disc pl-4">
@@ -208,7 +206,7 @@ const MedicalHistoryCard = ({ medicalRecords }: MedicalHistoryCardProps) => {
                 .map((record) => (
                   <div key={record.id} className="border rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-2">
-                      <Pills className="h-4 w-4 text-primary" />
+                      <Pill className="h-4 w-4 text-primary" />
                       <h4 className="font-medium text-sm">
                         Prescription for {record.assessment_diagnosis}
                       </h4>
