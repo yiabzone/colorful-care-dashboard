@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,12 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				health: {
+					excellent: 'hsl(var(--health-excellent))',
+					good: 'hsl(var(--health-good))',
+					average: 'hsl(var(--health-average))',
+					poor: 'hsl(var(--health-poor))'
 				}
 			},
 			borderRadius: {
@@ -84,11 +91,32 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-gentle': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.8'
+					}
+				},
+				'progress-fill': {
+					'0%': {
+						width: '0%'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-gentle': 'pulse-gentle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'progress-fill': 'progress-fill 1.5s ease-out forwards'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'purple-gradient': 'linear-gradient(90deg, hsl(277, 75%, 84%) 0%, hsl(297, 50%, 51%) 100%)',
+				'blue-gradient': 'linear-gradient(90deg, hsl(221, 45%, 73%) 0%, hsl(220, 78%, 29%) 100%)'
 			}
 		}
 	},
