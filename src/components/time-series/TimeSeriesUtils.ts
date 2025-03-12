@@ -1,3 +1,4 @@
+
 import { format, parseISO } from "date-fns";
 
 interface WeightRecord {
@@ -26,7 +27,7 @@ export interface ChartDataPoint {
 }
 
 export interface MetricRecord {
-  metric_name: string;
+  metric_name: string; // This is required
   value: number;
   status?: string;
   comments?: string;
@@ -34,7 +35,7 @@ export interface MetricRecord {
 }
 
 export interface ActionRecord {
-  name: string;
+  name: string; // This is required
   status: string;
   value?: number;
   comments?: string;

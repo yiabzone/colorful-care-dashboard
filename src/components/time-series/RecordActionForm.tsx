@@ -49,9 +49,12 @@ const RecordActionForm = () => {
     setIsLoading(true);
     
     try {
+      // Create the action data object, ensuring name is included
       const actionData: ActionRecord = {
-        ...data,
+        name: data.name, // This line ensures 'name' is provided
+        status: data.status,
         value: data.value ? parseFloat(data.value) : undefined,
+        comments: data.comments,
       };
       
       await recordAction(actionData);

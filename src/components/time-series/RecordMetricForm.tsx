@@ -49,9 +49,13 @@ const RecordMetricForm = () => {
     setIsLoading(true);
     
     try {
+      // Create the metric data object, ensuring metric_name is included
       const metricData: MetricRecord = {
-        ...data,
+        metric_name: data.metric_name, // This line ensures 'metric_name' is provided
         value: parseFloat(data.value),
+        status: data.status,
+        comments: data.comments,
+        measurement_type: data.measurement_type
       };
       
       await recordMetric(metricData);
