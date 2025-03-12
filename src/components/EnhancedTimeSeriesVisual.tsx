@@ -1,8 +1,7 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button"; // Added the missing Button import
+import { Button } from "@/components/ui/button";
 import { format, parseISO } from "date-fns";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid, ComposedChart, Bar } from "recharts";
 import { TrendingUp, Target, Activity, Calendar, Info } from "lucide-react";
@@ -47,11 +46,9 @@ const EnhancedTimeSeriesVisual = ({
   actionDescription,
   actionRecords,
 }: EnhancedTimeSeriesVisualProps) => {
-  // Process and combine data for visualization
   const combinedData = metricRecords.map(record => {
     const recordDate = format(parseISO(record.recorded_at), "MMM d");
     
-    // Find corresponding action for this date if it exists
     const matchingAction = actionRecords.find(
       action => format(parseISO(action.performed_at), "MMM d") === recordDate
     );
@@ -67,7 +64,6 @@ const EnhancedTimeSeriesVisual = ({
     };
   });
 
-  // Add any missing action records that don't have corresponding weight records
   actionRecords.forEach(action => {
     const actionDate = format(parseISO(action.performed_at), "MMM d");
     const exists = combinedData.some(item => item.date === actionDate);
@@ -76,7 +72,7 @@ const EnhancedTimeSeriesVisual = ({
       combinedData.push({
         date: actionDate,
         fullDate: action.performed_at,
-        weight: null, // No weight recorded on this date
+        weight: null,
         weightNotes: "",
         steps: action.value || 0,
         actionCompleted: action.result === "completed",
@@ -85,25 +81,21 @@ const EnhancedTimeSeriesVisual = ({
     }
   });
 
-  // Sort combined data by date
   combinedData.sort((a, b) => 
     new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime()
   );
 
-  // Calculate current value and progress
   const currentValue = metricRecords.length > 0 ? metricRecords[metricRecords.length - 1].recorded_value : 0;
   const initialValue = metricRecords.length > 0 ? metricRecords[0].recorded_value : 0;
   const totalChange = initialValue - targetValue;
   const currentChange = initialValue - currentValue;
   const progressPercentage = totalChange !== 0 ? (currentChange / totalChange) * 100 : 0;
 
-  // Calculate activity completion rate
   const completedActivities = actionRecords.filter(record => record.result === "completed").length;
   const completionRate = actionRecords.length > 0 
     ? (completedActivities / actionRecords.length) * 100 
     : 0;
 
-  // Custom tooltip for the chart
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -133,7 +125,28 @@ const EnhancedTimeSeriesVisual = ({
     }
     return null;
   };
-  
+
+  const renderColorfulBar = (props: any) => {
+    const { x, y, width, height, actionCompleted } = props;
+    
+    return (
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          fill="hsl(var(--health-average))"
+          fillOpacity={0.7}
+          stroke={props.payload.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
+          strokeWidth={2}
+          rx={4}
+          ry={4}
+        />
+      </g>
+    );
+  };
+
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardContent className="pt-6">
@@ -281,12 +294,32 @@ const EnhancedTimeSeriesVisual = ({
                 <Bar 
                   yAxisId="right"
                   dataKey="steps" 
-                  fill="hsl(var(--health-average))" // Changed from function to string
+                  fill="hsl(var(--health-average))"
                   fillOpacity={0.7}
                   radius={[4, 4, 0, 0]}
-                  // Using the stroke property to indicate completion status instead of dynamic fill
-                  stroke={(entry) => entry.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
-                  strokeWidth={2}
+                  stroke="hsl(var(--health-average))"
+                  strokeWidth={1}
+                  name="Steps"
+                  isAnimationActive={true}
+                  shape={(props) => {
+                    const { x, y, width, height, payload } = props;
+                    return (
+                      <g>
+                        <rect
+                          x={x}
+                          y={y}
+                          width={width}
+                          height={height}
+                          fill="hsl(var(--health-average))"
+                          fillOpacity={0.7}
+                          stroke={payload.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
+                          strokeWidth={2}
+                          rx={4}
+                          ry={4}
+                        />
+                      </g>
+                    );
+                  }}
                 />
               </ComposedChart>
             </ResponsiveContainer>
