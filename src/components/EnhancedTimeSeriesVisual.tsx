@@ -2,6 +2,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button"; // Added the missing Button import
 import { format, parseISO } from "date-fns";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, CartesianGrid, ComposedChart, Bar } from "recharts";
 import { TrendingUp, Target, Activity, Calendar, Info } from "lucide-react";
@@ -280,9 +281,12 @@ const EnhancedTimeSeriesVisual = ({
                 <Bar 
                   yAxisId="right"
                   dataKey="steps" 
-                  fill={(entry) => entry.actionCompleted ? 'hsl(var(--health-good))' : 'hsl(var(--health-poor))'}
-                  opacity={0.7}
+                  fill="hsl(var(--health-average))" // Changed from function to string
+                  fillOpacity={0.7}
                   radius={[4, 4, 0, 0]}
+                  // Using the stroke property to indicate completion status instead of dynamic fill
+                  stroke={(entry) => entry.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
+                  strokeWidth={2}
                 />
               </ComposedChart>
             </ResponsiveContainer>
