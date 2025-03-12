@@ -1,3 +1,4 @@
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -101,15 +102,15 @@ const EnhancedTimeSeriesVisual = ({
       return (
         <div className="bg-background border border-border p-3 rounded-md shadow-md text-sm">
           <p className="font-semibold">{label}</p>
-          {payload[0].value !== null && (
+          {payload[0]?.value !== null && (
             <div className="mt-1">
-              <p className="text-primary">{`Weight: ${payload[0].value} kg`}</p>
-              {payload[0].payload.weightNotes && (
+              <p className="text-primary">{`Weight: ${payload[0]?.value} kg`}</p>
+              {payload[0]?.payload.weightNotes && (
                 <p className="text-muted-foreground text-xs">{payload[0].payload.weightNotes}</p>
               )}
             </div>
           )}
-          {payload[1] && payload[1].value > 0 && (
+          {payload[1] && payload[1]?.value > 0 && (
             <div className="mt-1 border-t pt-1">
               <p className={payload[1].payload.actionCompleted ? "text-health-good" : "text-health-poor"}>
                 {`Steps: ${payload[1].value}`}
@@ -126,8 +127,12 @@ const EnhancedTimeSeriesVisual = ({
     return null;
   };
 
-  const renderColorfulBar = (props: any) => {
-    const { x, y, width, height, actionCompleted } = props;
+  // Custom shape renderer for the bar
+  const CustomBar = (props: any) => {
+    const { x, y, width, height, payload } = props;
+    const strokeColor = payload.actionCompleted 
+      ? "hsl(var(--health-good))" 
+      : "hsl(var(--health-poor))";
     
     return (
       <g>
@@ -138,7 +143,7 @@ const EnhancedTimeSeriesVisual = ({
           height={height}
           fill="hsl(var(--health-average))"
           fillOpacity={0.7}
-          stroke={props.payload.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
+          stroke={strokeColor}
           strokeWidth={2}
           rx={4}
           ry={4}
@@ -297,29 +302,9 @@ const EnhancedTimeSeriesVisual = ({
                   fill="hsl(var(--health-average))"
                   fillOpacity={0.7}
                   radius={[4, 4, 0, 0]}
-                  stroke="hsl(var(--health-average))"
-                  strokeWidth={1}
                   name="Steps"
                   isAnimationActive={true}
-                  shape={(props) => {
-                    const { x, y, width, height, payload } = props;
-                    return (
-                      <g>
-                        <rect
-                          x={x}
-                          y={y}
-                          width={width}
-                          height={height}
-                          fill="hsl(var(--health-average))"
-                          fillOpacity={0.7}
-                          stroke={payload.actionCompleted ? "hsl(var(--health-good))" : "hsl(var(--health-poor))"}
-                          strokeWidth={2}
-                          rx={4}
-                          ry={4}
-                        />
-                      </g>
-                    );
-                  }}
+                  shape={CustomBar}
                 />
               </ComposedChart>
             </ResponsiveContainer>
