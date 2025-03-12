@@ -8,6 +8,8 @@ import { Activity, Target, FileText, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
+import RecordMetricForm from "@/components/time-series/RecordMetricForm";
+import RecordActionForm from "@/components/time-series/RecordActionForm";
 
 const Index = () => {
   const { profile_data, health_goal, time_series, medical_reviews } = patientData;
@@ -25,12 +27,6 @@ const Index = () => {
   const latestReview = medical_reviews.medical_history.length > 0 
     ? [...medical_reviews.medical_history].sort((a, b) => b.id - a.id)[0]
     : null;
-  
-  // Format data for the small chart
-  const weightData = time_series.metrics.Weight.records.map(record => ({
-    date: format(parseISO(record.recorded_at), "MMM d"),
-    value: record.recorded_value
-  }));
   
   // Calculate activity completion rate
   const actionRecords = time_series.actions["Daily Walking"].records;
@@ -179,6 +175,12 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+        
+        {/* Record Forms */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <RecordMetricForm />
+          <RecordActionForm />
         </div>
       </main>
     </div>

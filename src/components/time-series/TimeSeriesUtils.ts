@@ -1,4 +1,3 @@
-
 import { format, parseISO } from "date-fns";
 
 interface WeightRecord {
@@ -24,6 +23,21 @@ export interface ChartDataPoint {
   steps: number;
   actionCompleted: boolean;
   actionNotes: string;
+}
+
+export interface MetricRecord {
+  metric_name: string;
+  value: number;
+  status?: string;
+  comments?: string;
+  measurement_type?: string;
+}
+
+export interface ActionRecord {
+  name: string;
+  status: string;
+  value?: number;
+  comments?: string;
 }
 
 export function prepareCombinedData(
@@ -96,4 +110,18 @@ export function calculateProgressMetrics(
     progressPercentage,
     completionRate
   };
+}
+
+export function recordMetric(metric: MetricRecord): Promise<boolean> {
+  console.log("Recording metric:", metric);
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), 500);
+  });
+}
+
+export function recordAction(action: ActionRecord): Promise<boolean> {
+  console.log("Recording action:", action);
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), 500);
+  });
 }
